@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String
+  photo     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Model {
+  id           String              @id @default(uuid())
+  name         String              @unique
+  type         ModelType
+  age          Int
+  ethnicity    ModelEthinicty
+  eyecolor     ModelEyeColor
+  bald         Boolean
+  tensorPath   String?
+  triggerWord  String?
+  status       ModelTrainingStatus @default(pending)
+  falAiReqId   String?
+  userId       String
+  zipUrl       String
+  outputImages OutputImages[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@index([falAiReqId])
+}
+
+model OutputImages {
+  id         String             @id @default(uuid())
+  prompt     String
+  imageUrl   String             @default("")
+  userId     String
+  modelId    String
+  status     OutputImagesStatus @default(pending)
+  falAiReqId String?
+  model      Model              @relation(fields: [modelId], references: [id])
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@index([falAiReqId])
+}
+
+model Packs {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  description String
+  category    String
+  imageUrl    String
+  isApproved  Boolean       @default(false)
+  packPrompts  PackPrompts[]
+}
+
+model PackPrompts {
+  id     String @id @default(uuid())
+  name   String @unique
+  prompt String @unique
+  packId Int
+  pack   Packs  @relation(fields: [packId], references: [id])
+}
+
+enum ModelType {
+  man
+  woman
+  other
+}
+
+enum ModelEthinicty {
+  white
+  black
+  asian_american
+  east_asian
+  south_east_asian
+  south_asian
+  middle_eastern
+  pacific
+  hispanic
+}
+
+enum ModelEyeColor {
+  brown
+  blue
+  gray
+}
+
+enum OutputImagesStatus {
+  pending
+  completed
+  failed
+}
+
+enum ModelTrainingStatus {
+  pending
+  generated
+  failed
+}

@@ -1,5 +1,5 @@
 {
-  "name": "Image-Gen-AI",
+  "name": "artify",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -20,5 +20,8 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "zod": "^3.24.2"
+  }
 }
