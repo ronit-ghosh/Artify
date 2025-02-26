@@ -14,6 +14,19 @@ export class FalAiModel {
         return { request_id, response_url }
     }
 
+    public async generateHeadshot(tensorPath: string) {
+        const response = await fal.subscribe("fal-ai/flux-lora", {
+            input: {
+                prompt: "Generate a headshot infront of a white background",
+                loras: [{ path: tensorPath, scale: 1 }]
+            },
+
+        });
+        return {
+            headshotImageUrl: response.data.images[0].url
+        }
+    }
+
     public async trainModel(zipImageUrl: string, triggerWord: string) {
         const { request_id, response_url } = await fal.queue.submit("fal-ai/flux-lora-fast-training", {
             input: {

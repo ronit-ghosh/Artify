@@ -1,18 +1,28 @@
 import { prisma } from "@repo/db/client";
+import { FalAiModel } from "../ai-models/FalAiModel";
 import { Router } from "express";
+import { fal } from "@fal-ai/client";
 
 export const router = Router()
+const falAiModel = new FalAiModel()
 
 router.post("/webhook/train", async (req, res) => {
     console.log(req.body)
-    const falAiReqId = req.body.request_id
-    const tensorPath = req.body.tensorPath
+    const falAiReqId = req.body.request_id as string
+
+    const result = await fal.queue.result("fal-ai/flux-lora", { requestId: falAiReqId })
+    // @ts-ignore FIXME:
+    const tensorPath = result.data.diffusers_lora_file.url
+
+    const { headshotImageUrl } = await falAiModel.generateHeadshot(tensorPath)
+
     try {
         await prisma.model.updateMany({
             where: { falAiReqId },
             data: {
                 status: "generated",
-                tensorPath
+                tensorPath,
+                thumbnail: headshotImageUrl
             }
         })
         res.json({ msg: "Model Trained" })
@@ -24,7 +34,7 @@ router.post("/webhook/train", async (req, res) => {
 router.post("/webhook/image", async (req, res) => {
     console.log(req.body)
     const falAiReqId = req.body.request_id
-    const imageUrl = req.body.imageUrl
+    const imageUrl = req.body.payload.images[0].url
 
     try {
         await prisma.outputImages.updateMany({

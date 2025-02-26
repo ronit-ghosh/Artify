@@ -1,7 +1,6 @@
 import Packs from '@/components/Packs'
 import { BACKEND_URL } from '@/lib/config'
 import axios from 'axios'
-import React from 'react'
 
 
 async function getPacks() {

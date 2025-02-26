@@ -1,9 +1,7 @@
-import React from 'react'
+import Loading from "@/components/Loading";
 
 export default function loading() {
     return (
-        <div className='h-screen w-full grid place-items-center'>
-            loading....
-        </div>
+        <Loading />
     )
 }
