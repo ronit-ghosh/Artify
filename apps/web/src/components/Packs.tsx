@@ -32,9 +32,10 @@ export interface Packs {
     packPrompts: Pack[]
 }
 
-export default function Home({ packs }: { packs: Packs[] }) {
+export default function Packs() {
     const { getToken } = useAuth()
     const [models, setModels] = useState<Model[]>([])
+    const [packs, setPacks] = useState<Packs[]>([])
     const [selectedModel, setSelectedModel] = useState('')
     const [selectedPackId, setSelectedPackId] = useState<number>()
     console.log(selectedPackId)
@@ -49,6 +50,17 @@ export default function Home({ packs }: { packs: Packs[] }) {
             setModels(response.data.models)
         })()
     }, [getToken])
+
+    useEffect(() => {
+        (async function getPacks() {
+            try {
+                const response = await axios.get(`${BACKEND_URL}/api/packs/bulk`)
+                setPacks(response.data.packs)
+            } catch (error) {
+                console.error(error)
+            }
+        })()
+    }, [])
 
     async function handlePackGeneration() {
         const token = await getToken()
