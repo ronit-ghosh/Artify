@@ -46,7 +46,7 @@ export default function UploadImage({ onUpload }: OnUpload) {
                 const formData = new FormData()
                 formData.append("file", content)
 
-                const res = await axios.put(preSignedUrl, content)
+                await axios.put(preSignedUrl, content)
                 onUpload(`${CLOUDFLARE_URL}/${key}`)
                 setHasUploaded(true)
                 setUploaded(false)

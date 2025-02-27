@@ -15,7 +15,6 @@ async function getPacks() {
 export default async function page() {
     const packs = await getPacks()
     return (
-        // @ts-ignore
         <Packs packs={packs} />
     )
 }

@@ -6,19 +6,6 @@ import { Input } from "./ui/input";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 
-interface TrainingSession {
-    id: string;
-    title: string;
-    timeAgo: string;
-}
-
-
-const trainingSessions: TrainingSession[] = [
-    { id: "1", title: "Prompt #1", timeAgo: "2 hours ago" },
-    { id: "2", title: "Prompt #2", timeAgo: "2 hours ago" },
-    { id: "3", title: "Prompt #3", timeAgo: "2 hours ago" },
-];
-
 export default function SavePrompt() {
     const [prompt, setPrompt] = useState<string>()
     const [savedPrompts, setSavedPrompts] = useState<string[]>([])

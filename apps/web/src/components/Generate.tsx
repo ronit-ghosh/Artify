@@ -75,7 +75,7 @@ export default function Generate(props: {
                                             className='absolute top-6 left-6'>
                                             Free
                                         </Badge>}
-                                    <img
+                                    <Image
                                         src={model.thumbnail}
                                         alt={model.name}
                                         className="w-full h-56 object-cover rounded-md mb-3"

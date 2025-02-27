@@ -28,7 +28,7 @@ export default function PublicModel() {
             <div className="flex items-center gap-3">
               <CardTitle>Samay Raina</CardTitle>
             </div>
-            <CardDescription className="mt-2">This is a trained model on samay raina's face</CardDescription>
+            <CardDescription className="mt-2">This is a trained model on samay raina&apos;s face</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="text-sm text-muted-foreground">

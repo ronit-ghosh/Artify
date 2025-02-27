@@ -6,23 +6,13 @@ import { useAuth } from "@clerk/nextjs";
 import { Card } from './ui/card'
 import { BrainCircuit, ImageIcon, ImagesIcon, MessageSquare, Wallet } from 'lucide-react'
 
-const StatCard = ({ title, value, icon: Icon }: { title: string; value: string; icon: any }) => (
-    <Card className="p-6 space-y-2 bg-card">
-        <div className="flex items-center space-x-2 text-muted-foreground">
-            <Icon className="w-5 h-5" />
-            <span>{title}</span>
-        </div>
-        <div className="text-3xl font-bold text-card-foreground">{value}</div>
-    </Card>
-);
-
 export default function UserDetails() {
     const { getToken } = useAuth()
     const limit = 10
     const offset = 0
     const [images, setImages] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
-
+    console.log(loading)
     useEffect(() => {
         (async function fetchImages() {
             setLoading(true)
@@ -40,16 +30,40 @@ export default function UserDetails() {
                 setLoading(false)
             }
         })()
-    }, [])
+    }, [getToken])
 
 
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <StatCard title="Images Generated" value={`${images.length}`} icon={ImagesIcon} />
-                <StatCard title="Models" value="12" icon={BrainCircuit} />
-                <StatCard title="Prompts" value="456" icon={MessageSquare} />
-                <StatCard title="Balance" value="$789" icon={Wallet} />
+                <Card className="p-6 space-y-2 bg-card">
+                    <div className="flex items-center space-x-2 text-muted-foreground">
+                        <ImagesIcon className="w-5 h-5" />
+                        <span>Images Generated</span>
+                    </div>
+                    <div className="text-3xl font-bold text-card-foreground">{images.length}</div>
+                </Card>
+                <Card className="p-6 space-y-2 bg-card">
+                    <div className="flex items-center space-x-2 text-muted-foreground">
+                        <BrainCircuit className="w-5 h-5" />
+                        <span>Models</span>
+                    </div>
+                    <div className="text-3xl font-bold text-card-foreground">12</div>
+                </Card>
+                <Card className="p-6 space-y-2 bg-card">
+                    <div className="flex items-center space-x-2 text-muted-foreground">
+                        <MessageSquare className="w-5 h-5" />
+                        <span>Prompts</span>
+                    </div>
+                    <div className="text-3xl font-bold text-card-foreground">456</div>
+                </Card>
+                <Card className="p-6 space-y-2 bg-card">
+                    <div className="flex items-center space-x-2 text-muted-foreground">
+                        <Wallet className="w-5 h-5" />
+                        <span>Balance</span>
+                    </div>
+                    <div className="text-3xl font-bold text-card-foreground">₹789</div>
+                </Card>
             </div>
 
             <Card className={`mb-8 p-6 bg-card border-border ${images.length === 0 ? 'hidden' : 'block'}`}>

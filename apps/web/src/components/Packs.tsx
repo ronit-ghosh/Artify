@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowDown, ArrowDown01, ArrowDownNarrowWide, Plus } from "lucide-react";
+import { ArrowDown, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -37,7 +37,7 @@ export default function Home({ packs }: { packs: Packs[] }) {
     const [models, setModels] = useState<Model[]>([])
     const [selectedModel, setSelectedModel] = useState('')
     const [selectedPackId, setSelectedPackId] = useState<number>()
-
+    console.log(selectedPackId)
     useEffect(() => {
         (async function fetchModels() {
             const token = await getToken()
@@ -48,7 +48,7 @@ export default function Home({ packs }: { packs: Packs[] }) {
             })
             setModels(response.data.models)
         })()
-    }, [])
+    }, [getToken])
 
     async function handlePackGeneration() {
         const token = await getToken()

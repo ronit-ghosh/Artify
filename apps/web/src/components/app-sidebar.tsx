@@ -1,5 +1,5 @@
 "use client"
-import { ChevronDown, CircleUserRound, FileAxis3d, GalleryVerticalEnd, LayoutDashboard, LogOut, Sparkles, SunMoon, Wallet, Wand, WandSparkles } from "lucide-react"
+import { ChevronDown, CircleUserRound, GalleryVerticalEnd, LayoutDashboard, LogOut, Sparkles, SunMoon, Wallet, WandSparkles } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -18,6 +18,7 @@ import { useTheme } from "next-themes"
 import { User } from "./User"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible"
 import { SignOutButton } from "@clerk/clerk-react"
+import Link from "next/link"
 
 const items = [
     {
@@ -68,17 +69,15 @@ export function AppSidebar() {
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild className="py-6 pl-4 gap-3">
-                                        <a href={item.url}>
+                                        <Link href={item.url}>
                                             <item.icon />
                                             <span className="text-[1rem]">{item.title}</span>
-                                        </a>
+                                        </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
                             <SidebarMenuButton
-                                onClick={() => {
-                                    theme === "dark" ? setTheme("light") : setTheme("dark")
-                                }}
+                                onClick={() => theme === "dark" ? setTheme("light") : setTheme("dark")}
                                 className="py-6 pl-4 gap-3 cursor-pointer">
                                 <SunMoon />
                                 <span className="text-[1rem]"> Change Appearance</span>
@@ -94,16 +93,16 @@ export function AppSidebar() {
                                     <CollapsibleContent>
                                         <SidebarMenuItem>
                                             <SidebarMenuButton asChild className="py-6 pl-4 gap-3">
-                                                <a href="/credits">
+                                                <Link href="/credits">
                                                     <Wallet />
                                                     <span className="text-[1rem]">Buy Credits</span>
-                                                </a>
+                                                </Link>
                                             </SidebarMenuButton>
                                             <SidebarMenuButton asChild className="py-6 pl-4 gap-3">
-                                                <a href="/user">
+                                                <Link href="/user">
                                                     <CircleUserRound />
                                                     <span className="text-[1rem">Your Account</span>
-                                                </a>
+                                                </Link>
                                             </SidebarMenuButton>
                                             <SidebarMenuButton asChild className="py-6 pl-4 gap-3 cursor-pointer">
                                                 <SignOutButton >

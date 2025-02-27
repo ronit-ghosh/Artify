@@ -53,7 +53,7 @@ export default function CreatePack() {
     });
     const [loading, setLoading] = useState(false)
     const [packId, setPackId] = useState<number>()
-
+    console.log(packId)
     const addPromptField = () => {
         setFormData(prev => ({
             ...prev,
