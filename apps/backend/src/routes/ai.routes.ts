@@ -17,9 +17,9 @@ router.post("/training", AuthMiddleware, async (req, res) => {
         return
     }
 
-    // const { request_id, response_url } = await falAiModel.trainModel(zipUrl, name)
-
     try {
+        const { request_id, response_url } = await falAiModel.trainModel(zipUrl, name)
+
         const response = await prisma.model.create({
             data: {
                 name,
@@ -29,7 +29,7 @@ router.post("/training", AuthMiddleware, async (req, res) => {
                 eyecolor,
                 bald,
                 zipUrl,
-                // falAiReqId: request_id,
+                falAiReqId: request_id,
                 userId
             }
         });

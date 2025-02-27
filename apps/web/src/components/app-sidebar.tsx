@@ -1,20 +1,24 @@
 "use client"
-import { GalleryVerticalEnd, LayoutDashboard, Settings, Sparkles, SunMoon, WandSparkles } from "lucide-react"
+import { ChevronDown, CircleUserRound, GalleryVerticalEnd, LayoutDashboard, LogOut, Sparkles, SunMoon, Wallet, WandSparkles } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
+    SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarRail,
 } from "@/components/ui/sidebar"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import Image from "next/image"
 import { useTheme } from "next-themes"
+import { User } from "./User"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible"
+import { SignOutButton } from "@clerk/clerk-react"
+import Link from "next/link"
 
 const items = [
     {
@@ -36,11 +40,6 @@ const items = [
         title: "Generate Images",
         url: "/generate",
         icon: WandSparkles,
-    },
-    {
-        title: "Settings",
-        url: "/settings",
-        icon: Settings,
     },
 ]
 
@@ -70,38 +69,60 @@ export function AppSidebar() {
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild className="py-6 pl-4 gap-3">
-                                        <a href={item.url}>
+                                        <Link href={item.url}>
                                             <item.icon />
                                             <span className="text-[1rem]">{item.title}</span>
-                                        </a>
+                                        </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
                             <SidebarMenuButton
-                                onClick={() => {
-                                    theme === "dark" ? setTheme("light") : setTheme("dark")
-                                }}
+                                onClick={() => theme === "dark" ? setTheme("light") : setTheme("dark")}
                                 className="py-6 pl-4 gap-3 cursor-pointer">
                                 <SunMoon />
                                 <span className="text-[1rem]"> Change Appearance</span>
                             </SidebarMenuButton>
+                            <Collapsible defaultOpen className="group/collapsible">
+                                <SidebarGroup>
+                                    <SidebarGroupLabel asChild>
+                                        <CollapsibleTrigger>
+                                            Settings
+                                            <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                                        </CollapsibleTrigger>
+                                    </SidebarGroupLabel>
+                                    <CollapsibleContent>
+                                        <SidebarMenuItem>
+                                            <SidebarMenuButton asChild className="py-6 pl-4 gap-3">
+                                                <Link href="/credits">
+                                                    <Wallet />
+                                                    <span className="text-[1rem]">Buy Credits</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                            <SidebarMenuButton asChild className="py-6 pl-4 gap-3">
+                                                <Link href="/user">
+                                                    <CircleUserRound />
+                                                    <span className="text-[1rem">Your Account</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                            <SidebarMenuButton asChild className="py-6 pl-4 gap-3 cursor-pointer">
+                                                <SignOutButton >
+                                                    <span><LogOut />Logout</span>
+                                                </SignOutButton>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    </CollapsibleContent>
+                                </SidebarGroup>
+                            </Collapsible>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
                 <SidebarContent className="flex-row">
-                    <Avatar className="">
-                        <AvatarImage src="https://res.cloudinary.com/drynqkitl/image/upload/v1740220285/Dp_oxgveh.jpg" alt="DP" />
-                        <AvatarFallback>RG</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                        <span className="font-bold text-sm">Ronit Ghosh</span>
-                        <span className="text-xs font-thin">ronitghosh06@gmail.com</span>
-                    </div>
+                    <User />
                 </SidebarContent>
             </SidebarFooter>
-            <SidebarRail/>
+            <SidebarRail />
         </Sidebar>
     )
 }

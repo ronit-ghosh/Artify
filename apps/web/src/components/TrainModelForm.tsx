@@ -66,7 +66,7 @@ const TrainModelForm = () => {
             }
         })
 
-        console.log(response.data)
+        console.log(response.data.modelId)
         setLoading(false)
     };
 
@@ -74,18 +74,38 @@ const TrainModelForm = () => {
         <form
             onSubmit={handleSubmit}
             className="max-w-lg mx-auto space-y-4 p-6 rounded-2xl border">
-            <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                    id="name"
-                    className="mt-2"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    placeholder="Enter a unique username"
-                />
+            {/* 1st */}
+            <div className="flex gap-3">
+                <div className="space-y-2">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                        id="name"
+                        className="mt-2"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        required
+                        placeholder="Enter a unique username"
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="age">Age</Label>
+                    <Input
+                        id="age"
+                        type="number"
+                        placeholder="Enter age"
+                        value={formData.age ? formData.age : ''}
+                        onChange={(e) =>
+                            setFormData({ ...formData, age: parseInt(e.target.value) })
+                        }
+                        min={0}
+                        className="transition-all duration-200 focus:ring-2 focus:ring-neutral-200 mt-2"
+                        required
+                    />
+                </div>
             </div>
 
+            {/* 2nd */}
             <div className="space-y-2">
                 <Label>Type</Label>
                 <Select
@@ -103,23 +123,6 @@ const TrainModelForm = () => {
                         <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                 </Select>
-            </div>
-
-            <div className="space-y-2">
-                <Label htmlFor="age">Age</Label>
-                <Input
-                    id="age"
-                    type="number"
-                    minLength={2}
-                    maxLength={2}
-                    value={formData.age ? formData.age : ''}
-                    onChange={(e) =>
-                        setFormData({ ...formData, age: parseInt(e.target.value) })
-                    }
-                    min={0}
-                    className="transition-all duration-200 focus:ring-2 focus:ring-neutral-200 mt-2"
-                    required
-                />
             </div>
 
             <div className="space-y-2">
@@ -147,35 +150,37 @@ const TrainModelForm = () => {
                 </Select>
             </div>
 
-            <div className="space-y-2">
-                <Label>Eye Color</Label>
-                <Select
-                    value={formData.eyecolor}
-                    onValueChange={(value: FormData["eyecolor"]) =>
-                        setFormData({ ...formData, eyecolor: value })
-                    }
-                >
-                    <SelectTrigger className="mt-2">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="brown">Brown</SelectItem>
-                        <SelectItem value="blue">Blue</SelectItem>
-                        <SelectItem value="gray">Gray</SelectItem>
-                        <SelectItem value="hazel">Hazel</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
+            <div className="flex items-center gap-3">
+                <div className="space-y-2 w-full">
+                    <Label>Eye Color</Label>
+                    <Select
+                        value={formData.eyecolor}
+                        onValueChange={(value: FormData["eyecolor"]) =>
+                            setFormData({ ...formData, eyecolor: value })
+                        }
+                    >
+                        <SelectTrigger className="mt-2">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="brown">Brown</SelectItem>
+                            <SelectItem value="blue">Blue</SelectItem>
+                            <SelectItem value="gray">Gray</SelectItem>
+                            <SelectItem value="hazel">Hazel</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
 
-            <div className="flex items-center space-x-2">
-                <Switch
-                    id="bald"
-                    checked={formData.bald}
-                    onCheckedChange={(checked) =>
-                        setFormData({ ...formData, bald: checked })
-                    }
-                />
-                <Label htmlFor="bald">Bald</Label>
+                <div className="flex flex-col justify-center gap-3 space-x-2">
+                    <Label htmlFor="bald">Bald</Label>
+                    <Switch
+                        id="bald"
+                        checked={formData.bald}
+                        onCheckedChange={(checked) =>
+                            setFormData({ ...formData, bald: checked })
+                        }
+                    />
+                </div>
             </div>
 
             <UploadImage

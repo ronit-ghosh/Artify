@@ -29,6 +29,8 @@ model Model {
   falAiReqId   String?
   userId       String
   zipUrl       String
+  thumbnail    String              @default("")
+  public       Boolean             @default(false)
   outputImages OutputImages[]
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
@@ -58,7 +60,7 @@ model Packs {
   category    String
   imageUrl    String
   isApproved  Boolean       @default(false)
-  packPrompts  PackPrompts[]
+  packPrompts PackPrompts[]
 }
 
 model PackPrompts {
@@ -67,6 +69,31 @@ model PackPrompts {
   prompt String @unique
   packId Int
   pack   Packs  @relation(fields: [packId], references: [id])
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String
+  plan      PlanType
+  paymentId String
+  orderId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserCredit {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  amount    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+enum PlanType {
+  basic
+  premium
 }
 
 enum ModelType {

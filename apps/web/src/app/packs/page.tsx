@@ -1,7 +1,6 @@
 import Packs from '@/components/Packs'
 import { BACKEND_URL } from '@/lib/config'
 import axios from 'axios'
-import React from 'react'
 
 
 async function getPacks() {
@@ -16,7 +15,6 @@ async function getPacks() {
 export default async function page() {
     const packs = await getPacks()
     return (
-        // @ts-ignore
         <Packs packs={packs} />
     )
 }

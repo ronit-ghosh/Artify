@@ -8,10 +8,12 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "env": ["BACKEND_URL", "CLOUDFLARE_URL"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["^check-types"],
+      "env": ["BACKEND_URL", "CLOUDFLARE_URL"]
     },
     "dev": {
       "cache": false,

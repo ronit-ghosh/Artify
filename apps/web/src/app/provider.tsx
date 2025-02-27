@@ -3,11 +3,13 @@ import { ReactNode } from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 export const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <ClerkProvider
+      signInFallbackRedirectUrl="/"
+      signUpFallbackRedirectUrl="/"
       appearance={{
         baseTheme: dark,
       }}>
@@ -18,6 +20,9 @@ export const Providers = ({ children }: { children: ReactNode }) => {
         disableTransitionOnChange
       >
         <SidebarProvider>
+          <div className="md:hidden block">
+            <SidebarTrigger />
+          </div>
           {children}
         </SidebarProvider>
       </ThemeProvider>

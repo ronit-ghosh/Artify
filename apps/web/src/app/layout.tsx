@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Providers } from "@/app/provider";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Providers } from "./provider";
 import { AppSidebar } from "@/components/app-sidebar";
+import { Toaster } from "sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,7 +29,8 @@ export default function RootLayout({
       <link rel="shortcut icon" href="https://res.cloudinary.com/drynqkitl/image/upload/v1740221612/Artify_uda5oc.png" type="image/x-icon" />
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
-          <AppSidebar />
+        <Toaster />
+        <AppSidebar />
           {children}
         </Providers>
       </body>
