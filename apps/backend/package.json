@@ -3,7 +3,8 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run src/bin.ts"
+    "dev": "bun run src/bin.ts",
+    "start": "bun run src/bin.ts"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -13,7 +14,9 @@
     "@repo/db": "*",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "razorpay": "^2.9.6",
+    "svix": "^1.61.3"
   },
   "devDependencies": {
     "@types/bun": "latest",

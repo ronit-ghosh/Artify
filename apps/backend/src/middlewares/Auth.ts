@@ -17,19 +17,26 @@ export default function AuthMiddleware(req: Request, res: Response, next: NextFu
     }
 
     const JWT_SECRET = clerkPublicKey.replace(/\\n/g, "\n")
-
+    
     try {
-        const decoded = jwt.verify(token, JWT_SECRET as string)
-        if (typeof decoded.sub !== 'string') {
+        const decoded = jwt.verify(token, JWT_SECRET, {
+            algorithms: ["RS256"],
+            issuer:
+                process.env.CLERK_ISSUER || "https://clerk.ronitghosh.site",
+            complete: true,
+        })
+
+        if (typeof decoded.payload.sub !== 'string') {
             res.status(403).json({ msg: "Wrong Auth Header!" })
             return
         }
-
-        req.userId = decoded.sub
         
+        req.userId = decoded.payload.sub
+
         next()
     } catch (error) {
-        res.status(400).json({ msg: "Something went wrong!" })
+        res.status(411).json({ msg: "Something went wrong!" })
+        console.error(error)
         return
     }
 }

@@ -51,3 +51,8 @@ export const createPacks = z.object({
 })
 
 export const packName = z.object({ name: z.string() })
+
+export const razorpayOrder = z.object({
+    amount: z.number(),
+    planType: z.enum(["basic", "premium"])
+})

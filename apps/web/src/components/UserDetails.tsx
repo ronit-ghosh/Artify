@@ -4,18 +4,46 @@ import axios from "axios";
 import { BACKEND_URL } from "@/lib/config";
 import { useAuth } from "@clerk/nextjs";
 import { Card } from './ui/card'
-import { BrainCircuit, ImageIcon, ImagesIcon, MessageSquare, Wallet } from 'lucide-react'
+import { Images, RotateCcw, Wallet } from 'lucide-react'
+import Image from "next/image";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Skeleton } from "./ui/skeleton";
 
 export default function UserDetails() {
     const { getToken } = useAuth()
     const limit = 10
     const offset = 0
     const [images, setImages] = useState<string[]>([])
-    const [loading, setLoading] = useState(false)
-    console.log(loading)
+    const [loading, setLoading] = useState(true)
+    const [isDownloading, setIsDownloading] = useState(false)
+    const [balance, setBalance] = useState<number>(0)
+
+    const handleDownload = async (imageUrl: string) => {
+        if (!imageUrl) return
+        try {
+            setIsDownloading(true)
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = `${imageUrl.split('/')[5]}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setIsDownloading(false)
+            // Free up memory
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            setIsDownloading(false)
+            console.error("Download failed:", error);
+        }
+    }
+
     useEffect(() => {
         (async function fetchImages() {
-            setLoading(true)
             try {
                 const token = await getToken()
                 const res = await axios.get(`${BACKEND_URL}/api/images/bulk?limit=${limit}&offset=${offset}`, {
@@ -30,53 +58,82 @@ export default function UserDetails() {
                 setLoading(false)
             }
         })()
+        getBalance()
     }, [getToken])
 
+    async function getBalance() {
+        try {
+            const token = await getToken()
+            const response = await axios.get(`${BACKEND_URL}/api/user-credits/balance`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setBalance(response.data.balance)
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Card className="p-6 space-y-2 bg-card">
-                    <div className="flex items-center space-x-2 text-muted-foreground">
-                        <ImagesIcon className="w-5 h-5" />
-                        <span>Images Generated</span>
-                    </div>
-                    <div className="text-3xl font-bold text-card-foreground">{images.length}</div>
-                </Card>
-                <Card className="p-6 space-y-2 bg-card">
-                    <div className="flex items-center space-x-2 text-muted-foreground">
-                        <BrainCircuit className="w-5 h-5" />
-                        <span>Models</span>
-                    </div>
-                    <div className="text-3xl font-bold text-card-foreground">12</div>
-                </Card>
-                <Card className="p-6 space-y-2 bg-card">
-                    <div className="flex items-center space-x-2 text-muted-foreground">
-                        <MessageSquare className="w-5 h-5" />
-                        <span>Prompts</span>
-                    </div>
-                    <div className="text-3xl font-bold text-card-foreground">456</div>
-                </Card>
-                <Card className="p-6 space-y-2 bg-card">
-                    <div className="flex items-center space-x-2 text-muted-foreground">
-                        <Wallet className="w-5 h-5" />
-                        <span>Balance</span>
-                    </div>
-                    <div className="text-3xl font-bold text-card-foreground">₹789</div>
-                </Card>
+            <div className="flex justify-between items-center mb-8 px-4">
+                <h1 className="text-4xl font-bold">Dashboard</h1>
+                <div className="flex items-center gap-3">
+                    <RotateCcw
+                        onClick={getBalance}
+                        size={12}
+                        className="cursor-pointer"
+                    />
+                    <span
+                        className="flex items-center gap-2 text-xl">
+                        <Wallet />
+                        {balance}
+                    </span>
+                </div>
             </div>
-
-            <Card className={`mb-8 p-6 bg-card border-border ${images.length === 0 ? 'hidden' : 'block'}`}>
+            <Card className={`mb-8 p-6 bg-card border-border`}>
                 <h2 className="text-xl font-semibold mb-4">Generated Images</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {images.map((i) => (
-                        <div
-                            key={i}
-                            className="aspect-square rounded-lg bg-muted flex items-center justify-center"
-                        >
-                            <ImageIcon className="w-10 h-10 text-muted-foreground" />
+                    {
+                        images.length === 0 && <div className={`${loading ? 'hidden' : 'block'} col-span-4 place-items-center justify-center flex gap-2 text-xl text-neutral-500 `}>
+                            <Images /> No Photos Generated Yet
                         </div>
-                    ))}
+                    }
+                    {loading ?
+                        [1, 1, 1, 1].map((_, i) => <Skeleton key={i} className="w-full h-56 rounded-lg" />) :
+                        images.map((image, i) => (
+                            <div
+                                key={i}
+                                className="rounded-lg bg-muted flex items-center justify-center"
+                            >
+                                <Dialog>
+                                    <DialogTrigger className='cursor-pointer'>
+                                        <Image
+                                            src={image}
+                                            width={5000}
+                                            height={5000}
+                                            className="object-cover rounded-md"
+                                            alt="image" />
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogTitle className='w-full flex justify-end px-4'>
+                                            <Button
+                                                onClick={() => handleDownload(image)}>
+                                                {isDownloading ? 'Downloading...' : 'Download'}
+                                            </Button>
+                                        </DialogTitle>
+                                        <Image
+                                            src={image}
+                                            alt={'image'}
+                                            width={5000}
+                                            height={5000}
+                                            className="w-full object-cover rounded-md mb-3"
+                                        />
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+                        ))}
                 </div>
             </Card>
         </>

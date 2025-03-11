@@ -7,7 +7,7 @@ export const router = Router()
 const falAiModel = new FalAiModel()
 
 router.post("/webhook/train", async (req, res) => {
-    console.log(req.body)
+    console.log("Training webhook endpoint: ", req.body)
     const falAiReqId = req.body.request_id as string
 
     const result = await fal.queue.result("fal-ai/flux-lora", { requestId: falAiReqId })
@@ -32,7 +32,7 @@ router.post("/webhook/train", async (req, res) => {
 })
 
 router.post("/webhook/image", async (req, res) => {
-    console.log(req.body)
+    console.log("Image webhook endpoint: ",req.body)
     const falAiReqId = req.body.request_id
     const imageUrl = req.body.payload.images[0].url
 

@@ -21,6 +21,11 @@ const nextConfig = {
         hostname: "pub-66db4db1df6146b2a0d8cbe8012f60fe.r2.dev",
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: "v3.fal.media",
+        pathname: '**',
+      },
     ],
   }
 };

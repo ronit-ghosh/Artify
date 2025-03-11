@@ -43,6 +43,10 @@ export default function SavePrompt() {
                 <Card className="p-6 bg-card border-border">
                     <h2 className="text-xl font-semibold mb-4">Saved Prompt</h2>
                     <div className="space-y-4">
+                        {savedPrompts.length === 0 &&
+                            <div className="text-sm text-neutral-500 grid place-items-center">
+                                No Saved Prompts
+                            </div>}
                         {savedPrompts.map((prompt, index) => (
                             <div
                                 key={index}

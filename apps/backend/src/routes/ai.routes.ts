@@ -2,7 +2,7 @@ import { generateImage, TrainModel } from "@repo/common/types";
 import { prisma } from "@repo/db/client";
 import { Router } from "express";
 import { FalAiModel } from "../ai-models/FalAiModel";
-import AuthMiddleware from "../middlewares";
+import AuthMiddleware from "../middlewares/Auth";
 
 export const router = Router();
 const falAiModel = new FalAiModel()
@@ -18,7 +18,7 @@ router.post("/training", AuthMiddleware, async (req, res) => {
     }
 
     try {
-        const { request_id, response_url } = await falAiModel.trainModel(zipUrl, name)
+        const { request_id } = await falAiModel.trainModel(zipUrl, name)
 
         const response = await prisma.model.create({
             data: {
@@ -33,7 +33,7 @@ router.post("/training", AuthMiddleware, async (req, res) => {
                 userId
             }
         });
-        res.json({ msg: "Model created successfully", modelId: response.id });
+        res.json({ msg: "Model created successfully", modelId: response.id, request_id });
     } catch (error) {
         res.status(400).json({ msg: "Error occured while creating model!" });
     }
@@ -58,8 +58,8 @@ router.post("/generate", async (req, res) => {
             res.status(400).json({ msg: "Could not find the model" });
             return
         }
-        const { request_id, response_url } = await falAiModel.generateImage(prompt, model.tensorPath);
-
+        const { request_id } = await falAiModel.generateImage(prompt, model.tensorPath);
+        6
         const response = await prisma.outputImages.create({
             data: {
                 prompt,
@@ -72,5 +72,6 @@ router.post("/generate", async (req, res) => {
         res.json({ msg: "Image generated successfully", imageId: response.id, request_id });
     } catch (error) {
         res.status(400).json({ msg: "Error occured while generating image!" });
+        console.error(error)
     }
 });
