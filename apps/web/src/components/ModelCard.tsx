@@ -58,7 +58,7 @@ export default function ModelCard({ falReqId }: { falReqId: string }) {
     if (falReqId === '') return
     return (
         <div className="relative border w-full h-96 rounded-lg p-4 max-w-sm cursor-pointer transition-all">
-            {loading ? <Skeleton className='w-full h-full' /> :
+            {data.tensorPath === '' ? <Skeleton className='w-full h-full' /> :
                 <>
                     <Badge className='capitalize absolute top-6 right-6'>{data?.status}</Badge>
                     <Image
