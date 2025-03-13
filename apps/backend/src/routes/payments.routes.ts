@@ -1,6 +1,6 @@
 import { razorpayOrder } from "@repo/common/types";
 import { prisma } from "@repo/db/client";
-import { Router, text } from "express";
+import { Router } from "express";
 import Razorpay from "razorpay";
 import crypto from "crypto"
 import AuthMiddleware from "../middlewares/Auth";
@@ -61,6 +61,7 @@ router.post('/order', AuthMiddleware, async (req, res) => {
 router.post('/razorpay', async (req, res) => {
     try {
         const body = JSON.stringify(req.body)
+        console.log("Razorpay💰: ",body)
 
         const signature = req.get('x-razorpay-signature')
 
@@ -86,7 +87,7 @@ router.post('/razorpay', async (req, res) => {
                                 paymentId: event.payload.payment.entity.id
                             },
                             where: {
-                                orderId: event.payload.payment.entity.order_id
+                                orderId: event.payload.payment.entity.order_id.toLowerCase()
                             }
                         })
 

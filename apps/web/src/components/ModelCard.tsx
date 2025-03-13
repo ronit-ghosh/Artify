@@ -28,6 +28,7 @@ export default function ModelCard({ falReqId }: { falReqId: string }) {
     const { getToken } = useAuth()
 
     async function fetchModel() {
+        setLoading(true)
         const token = await getToken()
         try {
             const response = await axios.get(`${BACKEND_URL}/api/models/status/${falReqId}`, {
@@ -51,10 +52,10 @@ export default function ModelCard({ falReqId }: { falReqId: string }) {
         }, 3000)
 
         return () => clearInterval(interval)
-        
+
     }, [falReqId, data.tensorPath])
 
-    if (!falReqId) return
+    if (falReqId === '') return
     return (
         <div className="relative border w-full h-96 rounded-lg p-4 max-w-sm cursor-pointer transition-all">
             {loading ? <Skeleton className='w-full h-full' /> :

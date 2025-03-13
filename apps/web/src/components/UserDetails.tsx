@@ -12,10 +12,11 @@ import { Skeleton } from "./ui/skeleton";
 
 export default function UserDetails() {
     const { getToken } = useAuth()
-    const limit = 10
-    const offset = 0
+    const [limit] = useState<number>(12)
+    const [offset, setOffset] = useState<number>(0)
+    const [totalCount, setTotalCount] = useState<number>(0)
     const [images, setImages] = useState<string[]>([])
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [isDownloading, setIsDownloading] = useState(false)
     const [balance, setBalance] = useState<number>(0)
 
@@ -42,24 +43,35 @@ export default function UserDetails() {
         }
     }
 
+    async function fetchImages() {
+        setLoading(true)
+        try {
+            const token = await getToken()
+            const res = await axios.get(`${BACKEND_URL}/api/images/bulk?limit=${limit}&offset=${offset}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setImages(prev => [...prev, ...res.data.imageUrls])
+            setTotalCount(res.data.totalCount)
+        } catch (error) {
+            console.error(error)
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    function loadMore() {
+        if (offset + limit < totalCount) {
+            setOffset(prevOffset => prevOffset + limit);
+        }
+    }
+
     useEffect(() => {
-        (async function fetchImages() {
-            try {
-                const token = await getToken()
-                const res = await axios.get(`${BACKEND_URL}/api/images/bulk?limit=${limit}&offset=${offset}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                setImages(res.data.imageUrls)
-                setLoading(false)
-            } catch (error) {
-                console.error(error)
-                setLoading(false)
-            }
-        })()
+        fetchImages()
         getBalance()
-    }, [getToken])
+    }, [offset])
 
     async function getBalance() {
         try {
@@ -94,7 +106,7 @@ export default function UserDetails() {
             </div>
             <Card className={`mb-8 p-6 bg-card border-border`}>
                 <h2 className="text-xl font-semibold mb-4">Generated Images</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-center">
                     {
                         images.length === 0 && <div className={`${loading ? 'hidden' : 'block'} col-span-4 place-items-center justify-center flex gap-2 text-xl text-neutral-500 `}>
                             <Images /> No Photos Generated Yet
@@ -135,7 +147,12 @@ export default function UserDetails() {
                             </div>
                         ))}
                 </div>
-            </Card>
+                <Button
+                    onClick={loadMore}
+                    className={`w-30 mx-auto ${totalCount <= 12 || images.length === totalCount ? "hidden" : "block"}`}>
+                    {loading ? "Loading..." : "Load More"}
+                </Button>
+            </Card >
         </>
     )
 }

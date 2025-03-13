@@ -50,6 +50,7 @@ export default function Generate(props: {
 
     async function handleGenerateImage() {
         setImageLoading(true)
+        if (imageUrl) setImageUrl('')
         const token = await getToken()
         try {
 
@@ -69,10 +70,15 @@ export default function Generate(props: {
     }
 
     async function fetchImage() {
+        const token = await getToken()
         try {
             setImageStatus('Pending')
             setImageLoading(true)
-            const res = await axios.get(`${BACKEND_URL}/api/images/status/${falReqId}`)
+            const res = await axios.get(`${BACKEND_URL}/api/images/status/${falReqId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             if (res.data.status == 'failed') {
                 setImageLoading(false)
                 setImageStatus('failed')
@@ -166,20 +172,20 @@ export default function Generate(props: {
                         />
                         <div className="mt-4 flex justify-end gap-3">
                             <Button
-                                disabled={imageLoading}
+                                disabled={imageLoading || !prompt}
                                 variant="outline"
                                 onClick={() => setPrompt('')}
                             >
                                 Reset
                             </Button>
                             <Button
-                                disabled={imageLoading}
+                                disabled={imageLoading || !selectedCard || !prompt}
                                 onClick={handleGenerateImage}>
                                 {/* <Play className="h-4 w-4 mr-2" /> */}
                                 {imageLoading ? "Generating..." : "Run"}
                             </Button>
                         </div>
-
+                        {/* Custom tensorpath input */}
                         {/* <div className="bg-neutral-900 rounded-lg overflow-hidden">
                             <Accordion type="single" collapsible>
                                 <AccordionItem value="prompt">
@@ -224,7 +230,7 @@ export default function Generate(props: {
                             <DialogTrigger asChild className='cursor-pointer'>
                                 {imageLoading ?
                                     <Skeleton
-                                        className='h-2/3 w-full z-50'
+                                        className='h-96 w-full z-50'
                                     /> :
 
                                     <Image

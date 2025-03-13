@@ -3,6 +3,7 @@ import { prisma } from "@repo/db/client";
 import { Router } from "express";
 import { FalAiModel } from "../ai-models/FalAiModel";
 import AuthMiddleware from "../middlewares/Auth";
+import DeductCredit from "../utils/deductCredit";
 
 export const router = Router();
 const falAiModel = new FalAiModel()
@@ -10,6 +11,13 @@ const falAiModel = new FalAiModel()
 router.post("/training", AuthMiddleware, async (req, res) => {
     const { name, type, age, ethnicity, eyecolor, bald, zipUrl } = req.body;
     const userId = req.userId!
+
+    const hasCredits = DeductCredit(200, userId)
+
+    if (!hasCredits) {
+        res.status(400).json({ msg: "Not enough credits!" })
+        return
+    }
 
     const parsedValue = TrainModel.safeParse({ name, type, age, ethnicity, eyecolor, bald, zipUrl });
     if (!parsedValue.success) {
@@ -42,6 +50,14 @@ router.post("/training", AuthMiddleware, async (req, res) => {
 router.post("/generate", async (req, res) => {
     const { prompt, modelId } = req.body;
     const userId = req.userId!
+
+    const hasCredits = DeductCredit(1, userId)
+
+    if (!hasCredits) {
+        res.status(400).json({ msg: "Not enough credits!" })
+        return
+    }
+
     const parsedValue = generateImage.safeParse({ prompt, modelId });
     if (!parsedValue.success) {
         res.status(411).json({ msg: "Inputs are not valid!" });

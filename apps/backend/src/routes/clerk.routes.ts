@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
 
     const { id } = evt.data
     const eventType = evt.type
-    console.log(evt)
+    
     try {
         switch (eventType) {
             case "user.created":
