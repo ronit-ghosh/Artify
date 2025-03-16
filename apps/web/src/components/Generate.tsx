@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // import { Settings, Play } from 'lucide-react';
 // import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Button } from './ui/button';
@@ -50,7 +50,7 @@ export default function Generate(props: {
 
     async function handleGenerateImage() {
         setImageLoading(true)
-        setImageUrl('');  
+        setImageUrl('');
         setImageStatus('pending');
         const token = await getToken()
         try {
@@ -70,7 +70,7 @@ export default function Generate(props: {
         }
     }
 
-    async function fetchImage() {
+    const fetchImage = useCallback(async () => {
         const token = await getToken()
         try {
             setImageStatus('Pending')
@@ -95,7 +95,8 @@ export default function Generate(props: {
             setImageLoading(false)
             console.error(error)
         }
-    }
+    }, [falReqId, getToken])
+
 
     useEffect(() => {
         if (!falReqId || imageUrl) return;
@@ -106,7 +107,7 @@ export default function Generate(props: {
 
         return () => clearInterval(interval);
 
-    }, [falReqId, imageUrl])
+    }, [falReqId, fetchImage, imageUrl])
 
     const handleDownload = async (imageUrl: string) => {
         if (!imageUrl) return

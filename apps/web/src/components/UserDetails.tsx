@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "@/lib/config";
 import { useAuth } from "@clerk/nextjs";
@@ -43,7 +43,7 @@ export default function UserDetails() {
         }
     }
 
-    async function fetchImages() {
+    const fetchImages = useCallback(async () => {
         setLoading(true)
         try {
             const token = await getToken()
@@ -60,7 +60,7 @@ export default function UserDetails() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [getToken, limit, offset])
 
     function loadMore() {
         if (offset + limit < totalCount) {
@@ -68,12 +68,7 @@ export default function UserDetails() {
         }
     }
 
-    useEffect(() => {
-        fetchImages()
-        getBalance()
-    }, [offset])
-
-    async function getBalance() {
+    const getBalance = useCallback(async () => {
         try {
             const token = await getToken()
             const response = await axios.get(`${BACKEND_URL}/api/user-credits/balance`, {
@@ -85,7 +80,12 @@ export default function UserDetails() {
         } catch (error) {
             console.error(error)
         }
-    }
+    }, [getToken])
+
+    useEffect(() => {
+        fetchImages()
+        getBalance()
+    }, [offset, fetchImages, getBalance])
 
     return (
         <>

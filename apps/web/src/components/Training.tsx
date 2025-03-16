@@ -1,4 +1,3 @@
-import ModelCard from "@/components/ModelCard";
 import TrainModelForm from "@/components/TrainModelForm";
 
 export default function Training() {

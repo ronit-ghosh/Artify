@@ -2,7 +2,7 @@ import { BACKEND_URL } from '@/lib/config'
 import { useAuth } from '@clerk/nextjs'
 import axios from 'axios'
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Badge } from './ui/badge'
 import { Skeleton } from './ui/skeleton'
 
@@ -24,10 +24,10 @@ export default function ModelCard({ falReqId }: { falReqId: string }) {
         tensorPath: '',
         thumbnail: ''
     })
-    const [loading, setLoading] = useState(true)
+    const [, setLoading] = useState(true)
     const { getToken } = useAuth()
 
-    async function fetchModel() {
+    const fetchModel = useCallback(async () => {
         setLoading(true)
         const token = await getToken()
         try {
@@ -42,7 +42,7 @@ export default function ModelCard({ falReqId }: { falReqId: string }) {
             setLoading(false)
             console.error(error)
         }
-    }
+    }, [falReqId, getToken])
 
     useEffect(() => {
         if (!falReqId || data.tensorPath) return
@@ -53,7 +53,7 @@ export default function ModelCard({ falReqId }: { falReqId: string }) {
 
         return () => clearInterval(interval)
 
-    }, [falReqId, data.tensorPath])
+    }, [falReqId, data.tensorPath, fetchModel])
 
     if (falReqId === '') return
     return (

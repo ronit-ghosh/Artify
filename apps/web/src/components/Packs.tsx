@@ -11,7 +11,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "@/lib/config";
 import { useAuth } from "@clerk/nextjs";
@@ -86,7 +86,7 @@ export default function Packs() {
         }
     }
 
-    async function fetchImages() {
+    const fetchImages = useCallback(async () => {
         if (!falReqIds) return
 
         const token = await getToken()
@@ -98,8 +98,7 @@ export default function Packs() {
             }
         })
         setImageUrls(response.data.imageUrls)
-
-    }
+    }, [falReqIds, getToken])
 
     useEffect(() => {
         if (falReqIds?.length === 0) return
@@ -107,7 +106,7 @@ export default function Packs() {
             fetchImages()
         }, 3000)
         return () => clearInterval(interval)
-    }, [falReqIds])
+    }, [falReqIds, fetchImages])
 
     const handleDownload = async (imageUrl: string) => {
         if (!imageUrl) return
@@ -131,7 +130,7 @@ export default function Packs() {
             console.error("Download failed:", error);
         }
     }
-    
+
     return (
         <>
             {
