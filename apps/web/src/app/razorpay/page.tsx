@@ -59,12 +59,12 @@ export default function page() {
             router.push('/')
         }
     }
+    useEffect(() => {
+        handlePayment()
+    }, [])
     return (
         <div className="h-screen w-full flex justify-center items-center">
             <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-            <Button onClick={handlePayment}>
-                {loading ? "Loading..." : "Pay"}
-            </Button>
         </div>
     )
 }

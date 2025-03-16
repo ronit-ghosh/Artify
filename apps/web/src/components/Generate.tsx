@@ -50,7 +50,8 @@ export default function Generate(props: {
 
     async function handleGenerateImage() {
         setImageLoading(true)
-        if (imageUrl) setImageUrl('')
+        setImageUrl('');  
+        setImageStatus('pending');
         const token = await getToken()
         try {
 
