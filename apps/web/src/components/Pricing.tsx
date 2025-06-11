@@ -38,7 +38,7 @@ const PricingCard = ({
       </ul>
     </CardContent>
     <CardFooter>
-      <Link href={`/razorpay?plan=${plan}`}>
+      <Link href={`/buy-credits?plan=${plan}`}>
         <Button className="w-full" variant={buttonVariant}>
           Get Started
         </Button>

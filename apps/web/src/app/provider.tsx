@@ -8,8 +8,6 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 export const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <ClerkProvider
-      signInFallbackRedirectUrl="/"
-      signUpFallbackRedirectUrl="/"
       appearance={{
         baseTheme: dark,
       }}>

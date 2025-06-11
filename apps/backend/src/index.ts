@@ -30,3 +30,8 @@ app.use("/api/pre-signed-url", r2Router);
 app.use("/api/clerk", clerkRouter);
 app.use("/api/payments", paymentsRouter);
 app.use("/api/user-credits", AuthMiddleware, creditsRouter);
+
+app.get("/api/healthcheck", (req, res) => {
+    const url = process.env.WEBHOOK_BASE_URL
+    res.json({ msg: "Backend is running...", url })
+});
