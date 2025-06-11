@@ -1,7 +1,8 @@
 {
   "name": "backend",
-  "module": "src/index.ts",
+  "module": "src/bin.ts",
   "type": "module",
+  "main": "./src/bin.ts",
   "scripts": {
     "dev": "bun run src/bin.ts",
     "start": "bun run src/bin.ts"
