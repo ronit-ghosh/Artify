@@ -5,6 +5,7 @@
   "main": "./src/bin.ts",
   "scripts": {
     "dev": "bun run src/bin.ts",
+    "build": "bun build src/bin.ts --outdir dist",
     "start": "bun run src/bin.ts"
   },
   "peerDependencies": {
