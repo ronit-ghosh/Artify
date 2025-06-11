@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@fal-ai/client": "^1.2.3",
-    "@repo/db": "*",
+    "@repo/db": "workspace:*",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/bun": "latest",
     "@types/cors": "^2.8.17",
-    "@repo/common": "*",
+    "@repo/common": "workspace:*",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/express": "^5.0.0"
   }
