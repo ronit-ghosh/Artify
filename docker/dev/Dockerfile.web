@@ -2,10 +2,6 @@ FROM oven/bun:1
 
 WORKDIR /app
 
-ARG PUBLISHABLE_KEY
-
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$PUBLISHABLE_KEY
-
 COPY ./turbo.json ./turbo.json
 COPY ./bun.lockb ./bun.lockb
 COPY ./package.json ./package.json
@@ -14,9 +10,8 @@ COPY ./packages ./packages
 COPY ./apps/web ./apps/web
 
 RUN bun install
-RUN bun run build:web
 
 EXPOSE 3000
 
-CMD ["bun", "start:web"]
+CMD ["bun", "dev:web"]
 # docker build --build-arg PUBLISHABLE_KEY=<NEXT_PUBLIC> -t quiz_fe -f ./docker/Dockerfile.web .

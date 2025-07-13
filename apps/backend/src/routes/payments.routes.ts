@@ -61,7 +61,6 @@ router.post('/order', AuthMiddleware, async (req, res) => {
 router.post('/razorpay', async (req, res) => {
     try {
         const body = JSON.stringify(req.body)
-        console.log("Razorpay💰: ",body)
 
         const signature = req.get('x-razorpay-signature')
 

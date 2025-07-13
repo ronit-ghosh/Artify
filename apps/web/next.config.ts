@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
+import { config } from "dotenv";
+
+config({ path: "../../.env" });
 const nextConfig = {
-  env: {
-    BACKEND_URL: process.env.BACKEND_URL,
-    CLOUDFLARE_URL: process.env.CLOUDFLARE_URL,
-  },
   images: {
     remotePatterns: [
       {

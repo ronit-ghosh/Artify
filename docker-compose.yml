@@ -1,0 +1,60 @@
+services:
+  # Runs Postgres
+  db:
+    image: postgres:alpine
+    container_name: artifydb
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - artify:/var/lib/postgresql/data
+    healthcheck: # for => dependency failed to start: container cicddb has no healthcheck configured
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Migrates the database
+  migrate_db:
+    restart: no
+    build:
+      context: ./
+      dockerfile: docker/dev/Dockerfile.backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:mypassword@artifydb:5432/postgres
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["bun", "db:migrate"]
+
+  # Runs http-server
+  backend:
+    build:
+      network: host
+      context: ./
+      dockerfile: docker/dev/Dockerfile.backend
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Runs web
+  web:
+    build:
+      context: ./
+      dockerfile: docker/dev/Dockerfile.web
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+
+# Creates a volume
+volumes:
+  artify:

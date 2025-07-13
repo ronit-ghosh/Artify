@@ -69,7 +69,6 @@ router.post('/', async (req, res) => {
                         photo: evt.data.profile_image_url,
                     },
                 });
-                console.log(response)
                 break;
             }
 

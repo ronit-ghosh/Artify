@@ -14,5 +14,5 @@ RUN bun db:generate
 
 EXPOSE 8000
 
-CMD ["bun", "start:backend"]
+CMD ["bun", "dev:backend"]
 # docker build -t quiz_be -f ./docker/Dockerfile.backend .

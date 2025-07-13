@@ -7,10 +7,13 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo check-types",
-    "db:generate": "cd packages/db && bunx prisma generate && cd ../..",
-    "build:backend": "cd apps/backend && bun run build",
-    "start:backend": "cd apps/backend && bun run start",
-    "start:web": "cd apps/web && bun run build && bun run start"
+    "db:migrate": "cd packages/db && bunx prisma migrate dev",
+    "db:generate": "cd packages/db && bunx prisma generate",
+    "start:backend": "cd apps/backend && bun start",
+    "start:web": "cd apps/web && bun start",
+    "build:web": "cd apps/backend && bun run build",
+    "dev:backend": "cd apps/backend && bun dev",
+    "dev:web": "cd apps/web && bun dev"
   },
   "devDependencies": {
     "prettier": "^3.5.0",
