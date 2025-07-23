@@ -33,7 +33,12 @@ export default function Navbar() {
   const [hovered, setHovered] = useState<number | null>();
   const { theme, setTheme } = useTheme();
   return (
-    <header className="w-full h-18 flex justify-between border-y dark:border-[#ddd] border-[#111]">
+    <motion.header
+      initial={{ y: -30, filter: "blur(10px)", opacity: 0 }}
+      animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="w-full h-18 flex justify-between border-y dark:border-[#ddd] border-[#111]"
+    >
       <div className="hidden items-center gap-2 w-[16%] justify-center md:flex lg:border-r dark:border-[#ddd] border-[#111]">
         <Image src="/logo.png" alt="logo" width={40} height={40} className="" />
         <span className="text-2xl font-extrabold lg:block hidden">ARTIFY</span>
@@ -71,6 +76,6 @@ export default function Navbar() {
           })}
         </ul>
       </nav>
-    </header>
+    </motion.header>
   );
 }

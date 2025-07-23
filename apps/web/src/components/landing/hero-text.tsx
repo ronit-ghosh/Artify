@@ -1,10 +1,18 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "motion/react";
 
 export default function HeroText() {
   return (
     <div>
       <h1 className="uppercase min-[894px]:text-7xl text-5xl mt-20 font-extrabold text-center">
-        <div className="max-w-4xl w-full mx-auto relative">
+        <motion.div
+          initial={{ y: 20, filter: "blur(10px)", opacity: 0 }}
+          animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-4xl w-full mx-auto relative"
+        >
           Turn Your Selfie <br /> Into Stunning AI Art
           <Image
             className="absolute min-[894px]:right-42 min-[894px]:bottom-0 min-[894px]:w-27 min-[894px]:block hidden"
@@ -27,7 +35,7 @@ export default function HeroText() {
             width={35}
             height={35}
           />
-        </div>
+        </motion.div>
       </h1>
     </div>
   );
