@@ -13,7 +13,7 @@ export default function HeroText() {
           transition={{ duration: 0.5 }}
           className="max-w-4xl w-full mx-auto relative"
         >
-          Turn Your Selfie <br /> Into Stunning AI Art
+          <span className="text-transparent bg-clip-text bg-gradient-to-tl from-[#222] to-[#121212] dark:from-[#eee] dark:to-[#ddd]">Turn Your Selfie <br /> Into Stunning AI Art</span>
           <Image
             className="absolute min-[894px]:right-42 min-[894px]:bottom-0 min-[894px]:w-27 min-[894px]:block hidden"
             src="/line.svg"
