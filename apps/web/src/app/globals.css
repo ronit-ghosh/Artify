@@ -76,6 +76,7 @@
 }
 
 @theme inline {
+  --font-parkinsans: var(--font-parkinsans);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -141,4 +142,12 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  font-family: var(--font-parkinsans);
+}
+
+button {
+  cursor: pointer;
 }
