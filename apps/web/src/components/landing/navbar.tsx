@@ -34,20 +34,20 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   return (
     <header className="w-full h-18 flex justify-between border-y dark:border-[#ddd] border-[#111]">
-      <div className="hidden items-center gap-2 w-[16%] justify-center md:flex">
+      <div className="hidden items-center gap-2 w-[16%] justify-center md:flex lg:border-r dark:border-[#ddd] border-[#111]">
         <Image src="/logo.png" alt="logo" width={40} height={40} className="" />
         <span className="text-2xl font-extrabold lg:block hidden">ARTIFY</span>
       </div>
       <Image
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        src={theme === "dark" ? "/mesh-dark.png" : "/mesh-light.png"}
+        src="/mesh.png"
         alt="mesh"
         width={1000}
         height={1000}
         className="object-cover lg:w-[30%] w-0 opacity-25 lg:block hidden"
       />
       <nav className="lg:w-[62%] md:w-[84%] w-full">
-        <ul className="flex h-full w-full items-center divide-x-1 dark:divide-[#ddd] divide-[#111] border-l border-[#111]">
+        <ul className="flex h-full w-full items-center divide-x-1 dark:divide-[#ddd] divide-[#111] border-l dark:border-[#ddd] border-[#111]">
           {NAV_LINKS.map((link, i) => {
             return (
               <Link
