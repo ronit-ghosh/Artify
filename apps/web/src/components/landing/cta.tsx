@@ -17,7 +17,7 @@ export default function CTA() {
           variant="custom"
           className="font-extrabold lg:text-2xl md:text-xl lg:w-64 lg:h-15 md:h-14 md:w-52 w-40 h-13 text-base"
         >
-          SEE PRICING
+          SEE DEMO
         </Button>
       </Link>
       <Link href="/dashboard/generate">
