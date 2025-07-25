@@ -19,7 +19,7 @@ export default function ImageGrid() {
       initial={{ filter: "blur(15px)", opacity: 0, scale: 0.95 }}
       animate={{ filter: "blur(0px)", opacity: 1, scale: 1 }}
       transition={{ duration: 0.4 }}
-      className="grid sm:grid-cols-3 grid-cols-2 max-w-4xl w-full h-180 mx-auto my-20 gap-4"
+      className="grid sm:grid-cols-3 grid-cols-2 max-w-4xl w-full h-180 mx-auto py-20 gap-4"
     >
       {IMAGES.map((image, i) => {
         return (
